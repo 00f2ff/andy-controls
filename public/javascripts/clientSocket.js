@@ -55,6 +55,8 @@ function clear() {
 }
 
 socket.on('send_circle', function(data) {
+	// clear a couple of times and then draw a circle
+	clear();clear(); // so janky
 	addCircle(data.x, data.y);
 })
 
