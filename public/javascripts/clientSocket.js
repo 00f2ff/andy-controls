@@ -17,7 +17,7 @@ var context = canvas.getContext('2d');
 
 // add circle function
 addCircle = function(x, y) { 
-	clear();clear(); // so janky
+	clear();
 	var c = context;
 	var r = 30;
 	c.beginPath();
@@ -49,14 +49,16 @@ canvas.addEventListener('touchstart', doOnTouchStart);
 
 // clear function
 function clear() {
-	context.fillStyle = 'rgba(255,255,255,0.2)'; // random opacity; might need to be more transparent
-	context.rect(0,0, width, height);
-	context.fill();
+	// context.fillStyle = 'rgba(255,255,255,0.2)'; // random opacity; might need to be more transparent
+	// context.rect(0,0, width, height);
+	// context.fill();
+	context.clearRect (0, 0, canvas.width, canvas.height);
 }
 
 socket.on('send_circle', function(data) {
 	// clear a couple of times and then draw a circle
-	clear();clear(); // so janky
+	// clear();clear(); // so janky
+	clear();
 	addCircle(data.x, data.y);
 })
 
