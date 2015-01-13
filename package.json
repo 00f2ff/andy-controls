@@ -1,11 +1,10 @@
 {
-  "name": "M2C-SimpleStaticServer",
+  "name": "AndyControl",
   "version": "1.0.0",
-  "description": "M2C Simple Static Server",
+  "description": "AndyControl",
   "author": {
-    "name": "Joe mertz",
-    "email": "JoeMertz@cmu.edu",
-    "url": "http://www.andrew.cmu.edu/course/67-328"
+    "name": "Duncan McIsaac",
+    "email": "dbm@andrew.cmu.edu"
   },
   "repository": {
     "type": "git",
@@ -17,7 +16,8 @@
   },
   "dependencies": {
     "express": "4.8",
-    "morgan": "1.2"
+    "morgan": "1.2",
+    "socket.io": "^1.2.1"
   },
   "devDependencies": {},
   "bundleDependencies": [],
