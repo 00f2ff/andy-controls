@@ -65,7 +65,7 @@ doOnTouchStart = function(e) {
 		redrawCanvasWithRotation();
 	}
 	// send a message to the server that we created a circle (but only when screen is touched)
-	socket.emit('userTap', {'x': newX, 'y': newY});
+	socket.emit('userTap', {x: circleLocation.x, y: circleLocation.y});
 }
 
 // touch start listener
@@ -93,6 +93,8 @@ rotateAndy = function(theta) {
 	context.drawImage(andy, -andy.width / 2, -andy.height / 2);
 	// restore old context (but icon is now rotated)
 	context.restore();
+	// send other user updated andy rotation
+	socket.emit('controllerRotate', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 }
 
 redrawCanvasWithRotation = function() { // rotation is relative to current position, so I don't need to save a variable
@@ -182,5 +184,19 @@ socket.on('send_move', function(data) {
 	else {
 		redrawCanvasWithRotation();
 	}
-})
+});
+
+// socket.on('send_rotate', function(data) {
+// 	// set andyLocation to passed in data
+// 	andyLocation.x = data.x;
+// 	andyLocation.y = data.y;
+// 	andyLocation.angle = data.angle;
+// 	// draw in andy and circle
+// 	if (andyLocation.angle === 0) {
+// 		redrawCanvas();
+// 	}
+// 	else {
+// 		redrawCanvasWithRotation();
+// 	}
+// })
 
