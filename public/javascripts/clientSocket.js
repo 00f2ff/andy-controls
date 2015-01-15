@@ -102,8 +102,6 @@ redrawCanvasWithRotation = function() { // rotation is relative to current posit
 	if (circleLocation.x >= 0 && circleLocation.y >= 0) {
 		addCircle(circleLocation.x, circleLocation.y);
 	}
-	// send other user updated andy rotation
-	socket.emit('controllerRotate', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 }
 
 moveAndy = function(keyCode) { // right now I'm moving with by a default of 5px
@@ -129,6 +127,7 @@ moveAndy = function(keyCode) { // right now I'm moving with by a default of 5px
 		}
 		redrawCanvasWithRotation();
 	}
+	// send server updated andyLocation data
 	socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 }
 
@@ -146,12 +145,16 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 			andyLocation.angle %= 360;
 			console.log(andyLocation.angle);
 			redrawCanvasWithRotation();
+			// send server updated andyLocation data
+			socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 			break;
 		case 68: // rotate clockwise (D)
 			andyLocation.angle += 10;
 			andyLocation.angle %= 360;
 			console.log(andyLocation.angle);
 			redrawCanvasWithRotation();
+			// send server updated andyLocation data
+			socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 			break;
 	}
 });
@@ -187,17 +190,4 @@ socket.on('send_move', function(data) {
 	}
 });
 
-// socket.on('send_rotate', function(data) {
-// 	// set andyLocation to passed in data
-// 	andyLocation.x = data.x;
-// 	andyLocation.y = data.y;
-// 	andyLocation.angle = data.angle;
-// 	// draw in andy and circle
-// 	if (andyLocation.angle === 0) {
-// 		redrawCanvas();
-// 	}
-// 	else {
-// 		redrawCanvasWithRotation();
-// 	}
-// })
 
