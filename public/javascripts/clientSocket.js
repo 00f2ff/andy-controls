@@ -52,7 +52,6 @@ andy.onload = function() {
 	// check for previously saved angle
 	console.log(andyLocation.angle)
 	if (andyLocation.angle != 0) {
-		console.log('hi');
 		redrawCanvasWithRotation();
 	}
 	else {
@@ -226,6 +225,13 @@ socket.on('update_data', function(data) {
 	andyLocation = data.andyLocation;
 	circleLocation = data.circleLocation;
 	saveDataToLocalStorage();
+	// Redraw again in case andy load is processed before this request comes through
+	if (andyLocation.angle != 0) {
+		redrawCanvasWithRotation();
+	}
+	else {
+		redrawCanvas();
+	}
 })
 
 socket.on('send_circle', function(data) {
