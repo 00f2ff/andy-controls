@@ -44,8 +44,8 @@ var andyLocation = {x: 500, y: 500, angle: 0}
 var circleLocation = {x: -1, y: -1}
 
 // set rotational angle and movement step
-var turn = 2;
-var step = 1;
+var turn = 0.5;
+var step = 0.25;
 
 
 // add andy to context
@@ -175,7 +175,6 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 		case 65: // rotate counter-clockwise (A)
 			andyLocation.angle -= turn; // IMPORTANT: the reason this is negative is because the unit circle is reversed vertically, just like the y-axis
 			andyLocation.angle %= 360;
-			console.log(andyLocation.angle);
 			redrawCanvasWithRotation();
 			// send server updated andyLocation data
 			socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
