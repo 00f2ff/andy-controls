@@ -24,13 +24,14 @@ andy.src = 'mini_rover.png';
 var andyLocation = {x: 500, y: 500, angle: 0}
 // set default circle values (fails draw case)
 var circleLocation = {x: -1, y: -1}
-// update from stored data in event of reconnect
-loadDataFromLocalStorage();
 
 
 // add andy to context
 andy.onload = function() {
+	// update from stored data in event of reconnect
+	loadDataFromLocalStorage();
 	// check for previously saved angle
+	console.log(andyLocation.angle)
 	if (andyLocation.angle != 0) {
 		rotateAndy();
 	}
