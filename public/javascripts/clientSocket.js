@@ -43,13 +43,15 @@ var andyLocation = {x: 500, y: 500, angle: 0}
 // set default circle values (fails draw case)
 var circleLocation = {x: -1, y: -1}
 
+// set rotational angle and movement step
+var turn = 2;
+var step = 1;
+
 
 // add andy to context
 andy.onload = function() {
 	// update from stored data in event of reconnect
 	loadDataFromLocalStorage();
-	// check for previously saved angle
-	console.log(andyLocation.angle)
 	redrawCanvasHandler(); // saving to local storage isn't needed here, but it happens
 }
 
@@ -137,22 +139,22 @@ function moveAndy(keyCode) { // right now I'm moving with by a default of 5px
 	// base case of no rotation (permits forward/backward [according to current icon direction])
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
-			andyLocation.x -= 5;
+			andyLocation.x -= step;
 		}
 		else if (keyCode === 83) {
-			andyLocation.x += 5;
+			andyLocation.x += step;
 		}
 		redrawCanvas();
 	}
 	else {
 		if (keyCode === 87) {
 			// Math trig functions use radians
-			andyLocation.x -= (5 * Math.cos(andyLocation.angle * Math.PI / 180));
-			andyLocation.y -= (5 * Math.sin(andyLocation.angle * Math.PI / 180));
+			andyLocation.x -= (step * Math.cos(andyLocation.angle * Math.PI / 180));
+			andyLocation.y -= (step * Math.sin(andyLocation.angle * Math.PI / 180));
 		}
 		else if (keyCode === 83) {
-			andyLocation.x += (5 * Math.cos(andyLocation.angle * Math.PI / 180));
-			andyLocation.y += (5 * Math.sin(andyLocation.angle * Math.PI / 180));
+			andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
+			andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
 		}
 		redrawCanvasWithRotation();
 	}
@@ -171,7 +173,7 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 			moveAndy(83);
 			break;
 		case 65: // rotate counter-clockwise (A)
-			andyLocation.angle -= 10; // IMPORTANT: the reason this is negative is because the unit circle is reversed vertically, just like the y-axis
+			andyLocation.angle -= turn; // IMPORTANT: the reason this is negative is because the unit circle is reversed vertically, just like the y-axis
 			andyLocation.angle %= 360;
 			console.log(andyLocation.angle);
 			redrawCanvasWithRotation();
@@ -179,7 +181,7 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 			socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 			break;
 		case 68: // rotate clockwise (D)
-			andyLocation.angle += 10;
+			andyLocation.angle += turn;
 			andyLocation.angle %= 360;
 			console.log(andyLocation.angle);
 			redrawCanvasWithRotation();
