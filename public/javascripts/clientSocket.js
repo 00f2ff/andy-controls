@@ -33,10 +33,11 @@ andy.onload = function() {
 	// check for previously saved angle
 	console.log(andyLocation.angle)
 	if (andyLocation.angle != 0) {
-		rotateAndy();
+		console.log('hi');
+		redrawCanvasWithRotation();
 	}
 	else {
-		drawAndy();
+		redrawCanvas();
 	}
 }
 
@@ -82,7 +83,7 @@ doOnTouchStart = function(e) {
 // touch start listener
 canvas.addEventListener('touchstart', doOnTouchStart);
 
-redrawCanvas = function() {
+function redrawCanvas() {
 	context.clearRect (0, 0, canvas.width, canvas.height);
 	if (circleLocation.x >= 0 && circleLocation.y >= 0) {
 		addCircle(circleLocation.x, circleLocation.y);
@@ -109,7 +110,7 @@ rotateAndy = function(theta) {
 	
 }
 
-redrawCanvasWithRotation = function() { // rotation is relative to current position, so I don't need to save a variable
+function redrawCanvasWithRotation() { // rotation is relative to current position, so I don't need to save a variable
 	context.clearRect (0, 0, canvas.width, canvas.height);
 	rotateAndy(andyLocation.angle);
 	if (circleLocation.x >= 0 && circleLocation.y >= 0) {
