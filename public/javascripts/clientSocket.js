@@ -169,7 +169,7 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 });
 
 
-loadDataFromLocalStorage = function() {
+function loadDataFromLocalStorage() {
 	// check if data is saved yet
 	if (localStorage.andyLocation && JSON.parse(localStorage.andyLocation)
 		&& localStorage.circleLocation && JSON.parse(localStorage.circleLocation)) {
@@ -179,7 +179,7 @@ loadDataFromLocalStorage = function() {
 	}
 }
 
-saveDataToLocalStorage = function() {
+function saveDataToLocalStorage() {
 	// save andy and circle data in localStorage
 	localStorage.andyLocation = JSON.stringify(andyLocation);
 	localStorage.circleLocation = JSON.stringify(circleLocation);
