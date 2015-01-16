@@ -30,10 +30,16 @@ loadDataFromLocalStorage();
 
 // add andy to context
 andy.onload = function() {
-	context.drawImage(andy, andyLocation.x, andyLocation.y);
+	// check for previously saved angle
+	if (andyLocation.angle != 0) {
+		rotateAndy();
+	}
+	else {
+		drawAndy();
+	}
 }
 
-drawAndy = function() { // if i don't repeat it, nothing shows up initially
+function drawAndy() {
 	context.drawImage(andy, andyLocation.x, andyLocation.y);
 }
 
