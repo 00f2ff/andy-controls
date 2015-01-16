@@ -1,5 +1,23 @@
 var socket = io.connect(':8000/');
 
+/*
+ * Explanation of location data:
+ * 1. App emits server request for location data that is passed along to another client
+   2a. If another client is running, it sends its location data back to server and then
+       to this client. That location data is saved.
+   2b. If there is not another client running, this client doesn't receive new data
+   3. In case of fresh start for whole app, default location data is set
+   4. When andy loads, location data is retrieved from storage
+   5a. If another client is running, the data loaded is their location data
+   5b. If another client is not running, the data loaded is this client's previous location data
+   5c. If the app has not been run on this browser yet, the default data remains
+ */
+
+// send this request when DOM is ready
+$(function() {
+	// check if another user is online / has location data
+	socket.emit('data_check', {});
+});
 
 // when window is touched, make touch animation and send information to server
 document.ontouchmove = function(e) {
@@ -20,7 +38,7 @@ var context = canvas.getContext('2d');
 var andy = new Image();
 andy.src = 'mini_rover.png';
 
-// set default andy data
+// set default andy data.
 var andyLocation = {x: 500, y: 500, angle: 0}
 // set default circle values (fails draw case)
 var circleLocation = {x: -1, y: -1}
@@ -28,6 +46,7 @@ var circleLocation = {x: -1, y: -1}
 
 // add andy to context
 andy.onload = function() {
+	
 	// update from stored data in event of reconnect
 	loadDataFromLocalStorage();
 	// check for previously saved angle
@@ -198,6 +217,16 @@ function saveDataToLocalStorage() {
  * Data is stored when touch occurs, and in both types of redraws.
  */
 
+socket.on('request_data', function(data) {
+	// send current andy / circle data
+	socket.emit('send_data', {andyLocation: andyLocation, circleLocation: circleLocation});
+});
+
+socket.on('update_data', function(data) {
+	andyLocation = data.andyLocation;
+	circleLocation = data.circleLocation;
+	saveDataToLocalStorage();
+})
 
 socket.on('send_circle', function(data) {
 	// set circleLocation to passed in data
@@ -231,3 +260,5 @@ socket.on('send_move', function(data) {
 });
 
 
+// I need to check with other user on connect if there is already data
+// if there are no other users, presumable nothing will be returned
