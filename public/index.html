@@ -13,13 +13,7 @@
 	
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<!-- disallow jquery mobile to use AJAX in order to prevent loading message from rendering.
-This is ok because socket.io doesn't use AJAX            THIS DOESN'T WORK... -->
-<!-- <script type="text/javascript">
-$(document).bind("mobileinit", function () {
-    $.mobile.ajaxEnabled = false;
-});
-</script> -->
+<!-- turn off jquery mobile ajax and loading message -->
 <script>
 $(document).on('mobileinit', function() {
 	$.mobile.ajaxEnabled = false;

@@ -18,7 +18,7 @@ var context = canvas.getContext('2d');
 
 // initialize andy image
 var andy = new Image();
-andy.src = 'andy_75.png';
+andy.src = 'mini_rover.png';
 
 // xy coordinates of andy icon
 var andyLocation = {x: 500, y: 500, angle: 0}
