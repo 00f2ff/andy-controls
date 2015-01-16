@@ -8,14 +8,19 @@
 	<link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
-	<div data-role="page"> <!-- required for jQuery mobile -->
-		<canvas id="main" width="1024" height="768"></canvas>
-	</div>
+	<img src="lunar_surface.jpg">
+	<canvas id="main" width="1024" height="768"></canvas>
 	
 
-<!-- Put JavaScript at end of body -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<!-- ADD JQUERY MOBILE FOR TOUCH -->
+<!-- disallow jquery mobile to use AJAX in order to prevent loading message from rendering.
+This is ok because socket.io doesn't use AJAX            THIS DOESN'T WORK... -->
+<!-- <script type="text/javascript">
+$(document).bind("mobileinit", function () {
+    $.mobile.ajaxEnabled = false;
+});
+</script> -->
+<!-- jQuery mobile is used to add touch capabilities -->
 <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
 
 <!-- socket.io file -->

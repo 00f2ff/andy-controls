@@ -13,3 +13,13 @@ body {
 	background-color: blue;
 	opacity: 0.2;
 }*/
+
+#container {
+	/*position: relative;*/
+}
+
+canvas {
+	position: absolute;
+	z-index: 10;
+	opacity: 0;
+}
