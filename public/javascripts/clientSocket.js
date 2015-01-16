@@ -46,17 +46,11 @@ var circleLocation = {x: -1, y: -1}
 
 // add andy to context
 andy.onload = function() {
-	
 	// update from stored data in event of reconnect
 	loadDataFromLocalStorage();
 	// check for previously saved angle
 	console.log(andyLocation.angle)
-	if (andyLocation.angle != 0) {
-		redrawCanvasWithRotation();
-	}
-	else {
-		redrawCanvas();
-	}
+	redrawCanvasHandler(); // saving to local storage isn't needed here, but it happens
 }
 
 function drawAndy() {
@@ -65,8 +59,6 @@ function drawAndy() {
 
 // add circle function
 addCircle = function(x, y) { 
-	
-	// context.clearRect (0, 0, canvas.width, canvas.height);
 	var c = context;
 	var r = 30;
 	c.beginPath();
@@ -76,7 +68,6 @@ addCircle = function(x, y) {
 	c.fill();
 	c.lineWidth = 0;
 	c.stroke();
-
 }
 
 // start function
@@ -86,12 +77,7 @@ doOnTouchStart = function(e) {
 	circleLocation.x = event.touches[0].clientX - canvasLeft;
 	circleLocation.y = event.touches[0].clientY - canvasTop;
 	// draw in andy and circle
-	if (andyLocation.angle === 0) {
-		redrawCanvas();
-	}
-	else {
-		redrawCanvasWithRotation();
-	}
+	redrawCanvasHandler();
 	// save new circle data to localstorage
 	saveDataToLocalStorage();
 	// send a message to the server that we created a circle (but only when screen is touched)
@@ -100,6 +86,15 @@ doOnTouchStart = function(e) {
 
 // touch start listener
 canvas.addEventListener('touchstart', doOnTouchStart);
+
+function redrawCanvasHandler() {
+	if (andyLocation.angle != 0) {
+		redrawCanvasWithRotation();
+	}
+	else {
+		redrawCanvas();
+	}
+}
 
 function redrawCanvas() {
 	context.clearRect (0, 0, canvas.width, canvas.height);
@@ -112,7 +107,7 @@ function redrawCanvas() {
 	drawAndy();
 }
 
-rotateAndy = function(theta) {
+function rotateAndy(theta) {
 	// save old context
 	context.save();
 	// set origin of context on andy icon
@@ -138,7 +133,7 @@ function redrawCanvasWithRotation() { // rotation is relative to current positio
 	saveDataToLocalStorage();
 }
 
-moveAndy = function(keyCode) { // right now I'm moving with by a default of 5px
+function moveAndy(keyCode) { // right now I'm moving with by a default of 5px
 	// base case of no rotation (permits forward/backward [according to current icon direction])
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
@@ -226,12 +221,7 @@ socket.on('update_data', function(data) {
 	circleLocation = data.circleLocation;
 	saveDataToLocalStorage();
 	// Redraw again in case andy load is processed before this request comes through
-	if (andyLocation.angle != 0) {
-		redrawCanvasWithRotation();
-	}
-	else {
-		redrawCanvas();
-	}
+	redrawCanvasHandler();
 })
 
 socket.on('send_circle', function(data) {
@@ -239,14 +229,7 @@ socket.on('send_circle', function(data) {
 	circleLocation.x = data.x;
 	circleLocation.y = data.y;
 	// draw in andy and circle
-	if (andyLocation.angle === 0) {
-		redrawCanvas();
-	}
-	else {
-		redrawCanvasWithRotation();
-	}
-	// save circle data to localstorage
-	saveDataToLocalStorage();
+	redrawCanvasHandler();
 });
 
 socket.on('send_move', function(data) {
@@ -255,16 +238,17 @@ socket.on('send_move', function(data) {
 	andyLocation.y = data.y;
 	andyLocation.angle = data.angle;
 	// draw in andy and circle
-	if (andyLocation.angle === 0) {
-		redrawCanvas();
-	}
-	else {
-		redrawCanvasWithRotation();
-	}
-	// save andy data to localstorage
-	saveDataToLocalStorage();
+	redrawCanvasHandler();
 });
 
 
-// I need to check with other user on connect if there is already data
-// if there are no other users, presumable nothing will be returned
+/*
+
+ * Known Issues
+
+ * After document is ready, andy will always be loaded before location data from another
+   client comes back (if it does at all). This leads to an inital draw, followed by a
+   redraw when/if the data comes through. The turnover is usually fairly quick, but it
+   causes a noticable gap. I'd have to use polling on the server to fix this.
+
+ */
