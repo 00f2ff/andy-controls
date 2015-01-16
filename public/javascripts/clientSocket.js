@@ -20,11 +20,13 @@ var context = canvas.getContext('2d');
 var andy = new Image();
 andy.src = 'mini_rover.png';
 
-// xy coordinates of andy icon
+// set default andy data
 var andyLocation = {x: 500, y: 500, angle: 0}
-
-// global circle coordinates for icon movement (default initial values; circle drawing doesn't occur if negative)
+// set default circle values (fails draw case)
 var circleLocation = {x: -1, y: -1}
+// update from stored data in event of reconnect
+loadDataFromLocalStorage();
+
 
 // add andy to context
 andy.onload = function() {
@@ -64,6 +66,8 @@ doOnTouchStart = function(e) {
 	else {
 		redrawCanvasWithRotation();
 	}
+	// save new circle data to localstorage
+	saveDataToLocalStorage();
 	// send a message to the server that we created a circle (but only when screen is touched)
 	socket.emit('userTap', {x: circleLocation.x, y: circleLocation.y});
 }
@@ -76,6 +80,8 @@ redrawCanvas = function() {
 	if (circleLocation.x >= 0 && circleLocation.y >= 0) {
 		addCircle(circleLocation.x, circleLocation.y);
 	}
+	// save andy data to localstorage
+	saveDataToLocalStorage();
 	// andy can move regardless of whether touch event is registered
 	drawAndy();
 }
@@ -102,6 +108,8 @@ redrawCanvasWithRotation = function() { // rotation is relative to current posit
 	if (circleLocation.x >= 0 && circleLocation.y >= 0) {
 		addCircle(circleLocation.x, circleLocation.y);
 	}
+	// save andy data to localstorage
+	saveDataToLocalStorage();
 }
 
 moveAndy = function(keyCode) { // right now I'm moving with by a default of 5px
@@ -127,6 +135,7 @@ moveAndy = function(keyCode) { // right now I'm moving with by a default of 5px
 		}
 		redrawCanvasWithRotation();
 	}
+
 	// send server updated andyLocation data
 	socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 }
@@ -159,6 +168,29 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 	}
 });
 
+
+loadDataFromLocalStorage = function() {
+	// check if data is saved yet
+	if (localStorage.andyLocation && JSON.parse(localStorage.andyLocation)
+		&& localStorage.circleLocation && JSON.parse(localStorage.circleLocation)) {
+		// set current information to saved data
+		andyLocation = JSON.parse(localStorage.andyLocation);
+		circleLocation = JSON.parse(localStorage.circleLocation);
+	}
+}
+
+saveDataToLocalStorage = function() {
+	// save andy and circle data in localStorage
+	localStorage.andyLocation = JSON.stringify(andyLocation);
+	localStorage.circleLocation = JSON.stringify(circleLocation);
+}
+
+/*
+ * Data is loaded when socket receives messages.
+ * Data is stored when touch occurs, and in both types of redraws.
+ */
+
+
 socket.on('send_circle', function(data) {
 	// set circleLocation to passed in data
 	circleLocation.x = data.x;
@@ -170,10 +202,8 @@ socket.on('send_circle', function(data) {
 	else {
 		redrawCanvasWithRotation();
 	}
-	// context.clearRect (0, 0, canvas.width, canvas.height);
-	// addCircle(data.x, data.y);
-	// // initiate Andy icon movement
-	// executeMove(data.x, data.y);
+	// save circle data to localstorage
+	saveDataToLocalStorage();
 });
 
 socket.on('send_move', function(data) {
@@ -188,6 +218,8 @@ socket.on('send_move', function(data) {
 	else {
 		redrawCanvasWithRotation();
 	}
+	// save andy data to localstorage
+	saveDataToLocalStorage();
 });
 
 
