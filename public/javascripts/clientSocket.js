@@ -59,6 +59,18 @@ function drawAndy() {
 	context.drawImage(andy, andyLocation.x, andyLocation.y);
 }
 
+// checks whether the andy icon is within bounds of the touch circle
+// addCircle is called on every redraw so an andy movement will be registered as updating the circle if need be
+function atTarget(radius) {
+	var distance = Math.sqrt(Math.pow((andyLocation.x - circleLocation.x), 2) + Math.pow((andyLocation.y - circleLocation.y), 2))
+	// just checking for andy.width / 2 + radius distance to simplify calculations
+	// more accurate calc is what distance could be on diagonal, but i'm not doing that
+	if (distance <= radius + andy.width / 2 - 2) { // small inset area
+		return true;
+	}
+	return false;
+}
+
 // add circle function
 addCircle = function(x, y) { 
 	var c = context;
@@ -68,7 +80,13 @@ addCircle = function(x, y) {
 	c.closePath();
 	c.fillStyle = 'rgba(255,0,0,0.2)'; // just a random opacity
 	c.fill();
-	c.lineWidth = 0;
+	if (atTarget(radius)) { // light up edge of circle if andy is within it
+		c.lineWidth = 5;
+		c.strokeStyle = rgba(0,0,255,0.2);
+	}
+	else {
+		c.lineWidth = 0;
+	}
 	c.stroke();
 }
 
@@ -135,7 +153,38 @@ function redrawCanvasWithRotation() { // rotation is relative to current positio
 	saveDataToLocalStorage();
 }
 
-function moveAndy(keyCode) { // right now I'm moving with by a default of 5px
+// if the icon would start going over the edge, don't let it
+function permitMovement(keyCode) { // hard-coding in canvas sizing
+	if (andyLocation.angle === 0) {
+		if (keyCode === 87) {
+			if (andyLocation.x < andy.width / 2) {
+				andyLocation.x += step;
+			}
+		}
+		else if (keyCode === 83) {
+			if (andyLocation.x > 1024 - andy.width / 2) {
+				andyLocation.x -= step;
+			}
+		}
+	}
+	else {
+		// icon could be anywhere when rotation occurs, so checks are not keyCode dependent
+		if ((andyLocation.x < andy.width / 2) || (andyLocation.x > 1024 - andy.width / 2) 
+			|| (andyLocation.y < andy.height / 2) || (andyLocation.y > 690 - andy.height / 2)) {
+			// however, changes to values are
+			if (keyCode === 87) {
+				andyLocation.x -= (step * Math.cos(andyLocation.angle * Math.PI / 180));
+				andyLocation.y -= (step * Math.sin(andyLocation.angle * Math.PI / 180));
+			}
+			else if (keyCode === 83) {
+			andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
+			andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
+			}
+		}
+	}
+}
+
+function moveAndy(keyCode) {
 	// base case of no rotation (permits forward/backward [according to current icon direction])
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
@@ -149,12 +198,12 @@ function moveAndy(keyCode) { // right now I'm moving with by a default of 5px
 	else {
 		if (keyCode === 87) {
 			// Math trig functions use radians
-			andyLocation.x -= (step * Math.cos(andyLocation.angle * Math.PI / 180));
-			andyLocation.y -= (step * Math.sin(andyLocation.angle * Math.PI / 180));
-		}
-		else if (keyCode === 83) {
 			andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
 			andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
+		}
+		else if (keyCode === 83) {
+			andyLocation.x -= (step * Math.cos(andyLocation.angle * Math.PI / 180));
+			andyLocation.y -= (step * Math.sin(andyLocation.angle * Math.PI / 180));
 		}
 		redrawCanvasWithRotation();
 	}
@@ -172,17 +221,16 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 		case 83: // down (S)
 			moveAndy(83);
 			break;
-		case 65: // rotate counter-clockwise (A)
-			andyLocation.angle -= turn; // IMPORTANT: the reason this is negative is because the unit circle is reversed vertically, just like the y-axis
+		case 65: // rotate clockwise (A)
+			andyLocation.angle += turn; 
 			andyLocation.angle %= 360;
 			redrawCanvasWithRotation();
 			// send server updated andyLocation data
 			socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 			break;
-		case 68: // rotate clockwise (D)
-			andyLocation.angle += turn;
+		case 68: // rotate counter-clockwise (D)
+			andyLocation.angle -= turn;
 			andyLocation.angle %= 360;
-			console.log(andyLocation.angle);
 			redrawCanvasWithRotation();
 			// send server updated andyLocation data
 			socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
@@ -229,6 +277,8 @@ socket.on('send_circle', function(data) {
 	// set circleLocation to passed in data
 	circleLocation.x = data.x;
 	circleLocation.y = data.y;
+	// make a beep sound for controller
+	document.getElementById('beep').play();
 	// draw in andy and circle
 	redrawCanvasHandler();
 });
