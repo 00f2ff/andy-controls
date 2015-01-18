@@ -168,6 +168,9 @@ function findCorners() {
 function permitMovement(keyCode) { // hard-coding in canvas sizing
 	var a = findCorners();
 	console.log(a);
+	for (var i = 0; i < a.length; i++) {
+		addCircle(a[i][0], a[i][1]);
+	}
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
 			if (andyLocation.x < andy.width / 2) {
