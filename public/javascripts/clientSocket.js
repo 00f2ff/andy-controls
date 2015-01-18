@@ -282,7 +282,8 @@ socket.on('send_circle', function(data) {
 	circleLocation.x = data.x;
 	circleLocation.y = data.y;
 	// make a beep sound for controller
-	document.getElementById('beep').load().play();
+	document.getElementById('beep').load()
+	document.getElementById('beep').play();
 	// draw in andy and circle
 	redrawCanvasHandler();
 });
