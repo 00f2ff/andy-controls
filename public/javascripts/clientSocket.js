@@ -80,11 +80,11 @@ addCircle = function(x, y) {
 	c.beginPath();
 	c.arc(x, y, r, 0, 2 * Math.PI, true);
 	c.closePath();
-	c.fillStyle = 'rgba(255,0,0,0.2)'; // just a random opacity
+	c.fillStyle = 'rgba(255,0,0,0.4)'; // just a random opacity
 	c.fill();
 	if (atTarget(r)) { // light up edge of circle if andy is within it
 		c.lineWidth = 5;
-		c.strokeStyle = 'rgba(0,0,255,0.2)';
+		c.strokeStyle = 'rgba(0,0,255,0.4)';
 	}
 	else {
 		c.lineWidth = 0;
@@ -195,6 +195,7 @@ function moveAndy(keyCode) {
 		else if (keyCode === 83) {
 			andyLocation.x -= step;
 		}
+		permitMovement(keyCode)
 		redrawCanvas();
 	}
 	else {
@@ -207,6 +208,7 @@ function moveAndy(keyCode) {
 			andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
 			andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
 		}
+		permitMovement(keyCode)
 		redrawCanvasWithRotation();
 	}
 
