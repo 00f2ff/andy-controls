@@ -158,12 +158,12 @@ function permitMovement(keyCode) { // hard-coding in canvas sizing
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
 			if (andyLocation.x < andy.width / 2) {
-				andyLocation.x += step;
+				andyLocation.x -= step;
 			}
 		}
 		else if (keyCode === 83) {
 			if (andyLocation.x > 1024 - andy.width / 2) {
-				andyLocation.x -= step;
+				andyLocation.x += step;
 			}
 		}
 	}
@@ -173,12 +173,12 @@ function permitMovement(keyCode) { // hard-coding in canvas sizing
 			|| (andyLocation.y < andy.height / 2) || (andyLocation.y > 690 - andy.height / 2)) {
 			// however, changes to values are
 			if (keyCode === 87) {
-				andyLocation.x -= (step * Math.cos(andyLocation.angle * Math.PI / 180));
-				andyLocation.y -= (step * Math.sin(andyLocation.angle * Math.PI / 180));
+				andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
+				andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
 			}
 			else if (keyCode === 83) {
-			andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
-			andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
+			andyLocation.x -= (step * Math.cos(andyLocation.angle * Math.PI / 180));
+			andyLocation.y -= (step * Math.sin(andyLocation.angle * Math.PI / 180));
 			}
 		}
 	}
@@ -188,22 +188,22 @@ function moveAndy(keyCode) {
 	// base case of no rotation (permits forward/backward [according to current icon direction])
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
-			andyLocation.x -= step;
+			andyLocation.x += step;
 		}
 		else if (keyCode === 83) {
-			andyLocation.x += step;
+			andyLocation.x -= step;
 		}
 		redrawCanvas();
 	}
 	else {
 		if (keyCode === 87) {
 			// Math trig functions use radians
-			andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
-			andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
-		}
-		else if (keyCode === 83) {
 			andyLocation.x -= (step * Math.cos(andyLocation.angle * Math.PI / 180));
 			andyLocation.y -= (step * Math.sin(andyLocation.angle * Math.PI / 180));
+		}
+		else if (keyCode === 83) {
+			andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
+			andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
 		}
 		redrawCanvasWithRotation();
 	}
@@ -222,14 +222,14 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 			moveAndy(83);
 			break;
 		case 65: // rotate clockwise (A)
-			andyLocation.angle += turn; 
+			andyLocation.angle -= turn; 
 			andyLocation.angle %= 360;
 			redrawCanvasWithRotation();
 			// send server updated andyLocation data
 			socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 			break;
 		case 68: // rotate counter-clockwise (D)
-			andyLocation.angle -= turn;
+			andyLocation.angle += turn;
 			andyLocation.angle %= 360;
 			redrawCanvasWithRotation();
 			// send server updated andyLocation data
