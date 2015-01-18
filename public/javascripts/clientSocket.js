@@ -65,8 +65,8 @@ function atTarget(radius) {
 	var distance = Math.sqrt(Math.pow((andyLocation.x - circleLocation.x), 2) + Math.pow((andyLocation.y - circleLocation.y), 2))
 	// just checking for andy.width / 2 + radius distance to simplify calculations
 	// more accurate calc is what distance could be on diagonal, but i'm not doing that
-	console.log(distance <= radius + andy.width / 2 - 2);
-	console.log(radius + andy.width / 2 - 2);
+	// console.log(distance <= radius + andy.width / 2 - 2);
+	// console.log(radius + andy.width / 2 - 2);
 	if (distance <= radius + andy.width / 2 - 2) { // small inset area
 		return true;
 	}
@@ -166,7 +166,8 @@ function findCorners() {
 
 // if the icon would start going over the edge, don't let it
 function permitMovement(keyCode) { // hard-coding in canvas sizing
-	console.log(findCorners());
+	var a = findCorners();
+	console.log(a);
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
 			if (andyLocation.x < andy.width / 2) {
