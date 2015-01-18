@@ -74,7 +74,7 @@ function atTarget(radius) {
 }
 
 // add circle function
-addCircle = function(x, y) { 
+function addCircle(x, y) { 
 	var c = context;
 	var r = 30;
 	c.beginPath();
@@ -155,8 +155,18 @@ function redrawCanvasWithRotation() { // rotation is relative to current positio
 	saveDataToLocalStorage();
 }
 
+function findCorners() {
+	return [
+			[Math.cos(andyLocation.angle*Math.PI/180)*andyLocation.x, Math.sin(andyLocation.angle*Math.PI/180)*andyLocation.y],
+			[Math.cos(andyLocation.angle*Math.PI/180)*(andyLocation.x+andy.width), Math.sin(andyLocation.angle*Math.PI/180)*(andyLocation.y+andy.height)],
+			[Math.cos(andyLocation.angle*Math.PI/180)*(andyLocation.x-andy.width), Math.sin(andyLocation.angle*Math.PI/180)*(andyLocation.y-andy.height)],
+			[Math.cos(andyLocation.angle*Math.PI/180)*(andyLocation.x-andy.width*Math.sqrt(2)), Math.sin(andyLocation.angle*Math.PI/180)*(andyLocation.y+andy.height*Math.sqrt(2))]
+	]
+}
+
 // if the icon would start going over the edge, don't let it
 function permitMovement(keyCode) { // hard-coding in canvas sizing
+	console.log(findCorners());
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
 			if (andyLocation.x < andy.width / 2) {
@@ -225,14 +235,14 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 		case 83: // down (S)
 			moveAndy(83);
 			break;
-		case 65: // rotate clockwise (A)
+		case 65: // rotate counter-clockwise (A)
 			andyLocation.angle -= turn; 
 			andyLocation.angle %= 360;
 			redrawCanvasWithRotation();
 			// send server updated andyLocation data
 			socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
 			break;
-		case 68: // rotate counter-clockwise (D)
+		case 68: // rotate clockwise (D)
 			andyLocation.angle += turn;
 			andyLocation.angle %= 360;
 			redrawCanvasWithRotation();
