@@ -65,6 +65,8 @@ function atTarget(radius) {
 	var distance = Math.sqrt(Math.pow((andyLocation.x - circleLocation.x), 2) + Math.pow((andyLocation.y - circleLocation.y), 2))
 	// just checking for andy.width / 2 + radius distance to simplify calculations
 	// more accurate calc is what distance could be on diagonal, but i'm not doing that
+	console.log(distance <= radius + andy.width / 2 - 2);
+	console.log(radius + andy.width / 2 - 2);
 	if (distance <= radius + andy.width / 2 - 2) { // small inset area
 		return true;
 	}
@@ -82,7 +84,7 @@ addCircle = function(x, y) {
 	c.fill();
 	if (atTarget(r)) { // light up edge of circle if andy is within it
 		c.lineWidth = 5;
-		c.strokeStyle = rgba(0,0,255,0.2);
+		c.strokeStyle = 'rgba(0,0,255,0.2)';
 	}
 	else {
 		c.lineWidth = 0;
