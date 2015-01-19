@@ -63,7 +63,8 @@ function drawAndy() {
 // addCircle is called on every redraw so an andy movement will be registered as updating the circle if need be
 function atTarget(radius) {
 	var center = findAndyCenter();
-	var distance = Math.sqrt(Math.pow((center.x - circleLocation.x), 2) + Math.pow((center.y - circleLocation.y), 2))
+	var distance = Math.sqrt(Math.pow((center.x - circleLocation.x), 2) + Math.pow((center.y - circleLocation.y), 2));
+	console.log("Distance: "+distance+", proper: "+radius+andy.width/2-2);
 	// just checking for andy.width / 2 + radius distance to simplify calculations
 	// more accurate calc is what distance could be on diagonal, but i'm not doing that
 	if (distance <= radius + andy.width / 2 - 2) { // small inset area
@@ -151,7 +152,6 @@ function redrawCanvasWithRotation() { // rotation is relative to current positio
 		addCircle(circleLocation.x, circleLocation.y);
 	}
 	// save andy data to localstorage
-	console.log(andyLocation.x, andyLocation.y);
 	saveDataToLocalStorage();
 }
 
@@ -163,6 +163,8 @@ function findAndyCenter() {
 	}
 }
 
+// Right now permitMovement allows rotation to go over edge. I can prevent that, but it might mean 
+// that physical Andy operation will stop matching up with virtual, which is bad
 // if the icon would start going over the edge, don't let it
 function permitMovement(keyCode) { // hard-coding in canvas sizing
 	var center = findAndyCenter();
