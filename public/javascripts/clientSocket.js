@@ -166,23 +166,24 @@ function findAndyCenter() {
 // if the icon would start going over the edge, don't let it
 function permitMovement(keyCode) { // hard-coding in canvas sizing
 	var center = findAndyCenter();
+	var padding = andy.width * Math.sqrt(2) / 2;
 
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
-			if (center.x < andy.width / 2) {
+			if (center.x < padding) {
 				andyLocation.x -= step;
 			}
 		}
 		else if (keyCode === 83) {
-			if (center.x > 1024 - andy.width / 2) {
+			if (center.x > 1024 - padding) {
 				andyLocation.x += step;
 			}
 		}
 	}
 	else {
 		// icon could be anywhere when rotation occurs, so checks are not keyCode dependent
-		if ((center.x < andy.width / 2) || (center.x > 1024 - andy.width / 2) 
-			|| (center.y < andy.height / 2) || (center.y > 690 - andy.height / 2)) {
+		if ((center.x < padding) || (center.x > 1024 - padding) 
+			|| (center.y < padding) || (center.y > 690 - padding)) {
 			// however, changes to values are
 			if (keyCode === 87) {
 				andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
