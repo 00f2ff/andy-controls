@@ -61,17 +61,17 @@ function drawAndy() {
 
 // checks whether the andy icon is within bounds of the touch circle
 // addCircle is called on every redraw so an andy movement will be registered as updating the circle if need be
-function atTarget(radius) {
-	var distance = Math.sqrt(Math.pow((andyLocation.x - circleLocation.x), 2) + Math.pow((andyLocation.y - circleLocation.y), 2))
-	// just checking for andy.width / 2 + radius distance to simplify calculations
-	// more accurate calc is what distance could be on diagonal, but i'm not doing that
-	// console.log(distance <= radius + andy.width / 2 - 2);
-	// console.log(radius + andy.width / 2 - 2);
-	if (distance <= radius + andy.width / 2 - 2) { // small inset area
-		return true;
-	}
-	return false;
-}
+// function atTarget(radius) {
+// 	var distance = Math.sqrt(Math.pow((andyLocation.x - circleLocation.x), 2) + Math.pow((andyLocation.y - circleLocation.y), 2))
+// 	// just checking for andy.width / 2 + radius distance to simplify calculations
+// 	// more accurate calc is what distance could be on diagonal, but i'm not doing that
+// 	// console.log(distance <= radius + andy.width / 2 - 2);
+// 	// console.log(radius + andy.width / 2 - 2);
+// 	if (distance <= radius + andy.width / 2 - 2) { // small inset area
+// 		return true;
+// 	}
+// 	return false;
+// }
 
 // add circle function
 function addCircle(x, y) { 
@@ -152,52 +152,55 @@ function redrawCanvasWithRotation() { // rotation is relative to current positio
 		addCircle(circleLocation.x, circleLocation.y);
 	}
 	// save andy data to localstorage
+	console.log(andyLocation.x, andyLocation.y);
 	saveDataToLocalStorage();
 }
 
-function findCorners() {
-	return [
-			[Math.cos(andyLocation.angle*Math.PI/180)*andyLocation.x, Math.sin(andyLocation.angle*Math.PI/180)*andyLocation.y],
-			[Math.cos(andyLocation.angle*Math.PI/180)*(andyLocation.x+andy.width), Math.sin(andyLocation.angle*Math.PI/180)*(andyLocation.y+andy.height)],
-			[Math.cos(andyLocation.angle*Math.PI/180)*(andyLocation.x-andy.width), Math.sin(andyLocation.angle*Math.PI/180)*(andyLocation.y-andy.height)],
-			[Math.cos(andyLocation.angle*Math.PI/180)*(andyLocation.x-andy.width*Math.sqrt(2)), Math.sin(andyLocation.angle*Math.PI/180)*(andyLocation.y+andy.height*Math.sqrt(2))]
-	]
-}
+// function findCorners() {
+// 	return [
+// 			[Math.cos(andyLocation.angle*Math.PI/180)*andyLocation.x, Math.sin(andyLocation.angle*Math.PI/180)*andyLocation.y],
+// 			[Math.cos(andyLocation.angle*Math.PI/180)*(andyLocation.x+andy.width), Math.sin(andyLocation.angle*Math.PI/180)*(andyLocation.y+andy.height)],
+// 			[Math.cos(andyLocation.angle*Math.PI/180)*(andyLocation.x-andy.width), Math.sin(andyLocation.angle*Math.PI/180)*(andyLocation.y-andy.height)],
+// 			[Math.cos(andyLocation.angle*Math.PI/180)*(andyLocation.x-andy.width*Math.sqrt(2)), Math.sin(andyLocation.angle*Math.PI/180)*(andyLocation.y+andy.height*Math.sqrt(2))]
+// 	]
+// }
 
 // if the icon would start going over the edge, don't let it
-function permitMovement(keyCode) { // hard-coding in canvas sizing
-	var a = findCorners();
-	console.log(a);
-	for (var i = 0; i < a.length; i++) {
-		addCircle(a[i][0], a[i][1]);
-	}
-	if (andyLocation.angle === 0) {
-		if (keyCode === 87) {
-			if (andyLocation.x < andy.width / 2) {
-				andyLocation.x -= step;
-			}
-		}
-		else if (keyCode === 83) {
-			if (andyLocation.x > 1024 - andy.width / 2) {
-				andyLocation.x += step;
-			}
-		}
-	}
-	else {
-		// icon could be anywhere when rotation occurs, so checks are not keyCode dependent
-		if ((andyLocation.x < andy.width / 2) || (andyLocation.x > 1024 - andy.width / 2) 
-			|| (andyLocation.y < andy.height / 2) || (andyLocation.y > 690 - andy.height / 2)) {
-			// however, changes to values are
-			if (keyCode === 87) {
-				andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
-				andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
-			}
-			else if (keyCode === 83) {
-			andyLocation.x -= (step * Math.cos(andyLocation.angle * Math.PI / 180));
-			andyLocation.y -= (step * Math.sin(andyLocation.angle * Math.PI / 180));
-			}
-		}
-	}
+// function permitMovement(keyCode) { // hard-coding in canvas sizing
+// 	// var a = findCorners();
+// 	// console.log(a);
+
+// 	if (andyLocation.angle === 0) {
+// 		if (keyCode === 87) {
+// 			if (andyLocation.x < andy.width / 2) {
+// 				andyLocation.x -= step;
+// 			}
+// 		}
+// 		else if (keyCode === 83) {
+// 			if (andyLocation.x > 1024 - andy.width / 2) {
+// 				andyLocation.x += step;
+// 			}
+// 		}
+// 	}
+// 	else {
+// 		// icon could be anywhere when rotation occurs, so checks are not keyCode dependent
+// 		if ((andyLocation.x < andy.width / 2) || (andyLocation.x > 1024 - andy.width / 2) 
+// 			|| (andyLocation.y < andy.height / 2) || (andyLocation.y > 690 - andy.height / 2)) {
+// 			// however, changes to values are
+// 			if (keyCode === 87) {
+// 				andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
+// 				andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
+// 			}
+// 			else if (keyCode === 83) {
+// 			andyLocation.x -= (step * Math.cos(andyLocation.angle * Math.PI / 180));
+// 			andyLocation.y -= (step * Math.sin(andyLocation.angle * Math.PI / 180));
+// 			}
+// 		}
+// 	}
+// }
+
+function findAndyCenter() {
+
 }
 
 function moveAndy(keyCode) {
@@ -209,7 +212,7 @@ function moveAndy(keyCode) {
 		else if (keyCode === 83) {
 			andyLocation.x -= step;
 		}
-		permitMovement(keyCode)
+		// permitMovement(keyCode)
 		redrawCanvas();
 	}
 	else {
@@ -222,7 +225,7 @@ function moveAndy(keyCode) {
 			andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
 			andyLocation.y += (step * Math.sin(andyLocation.angle * Math.PI / 180));
 		}
-		permitMovement(keyCode)
+		// permitMovement(keyCode)
 		redrawCanvasWithRotation();
 	}
 
