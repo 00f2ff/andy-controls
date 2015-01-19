@@ -187,7 +187,7 @@ function permitMovement(keyCode) { // hard-coding in canvas sizing
 	else {
 		// icon could be anywhere when rotation occurs, so checks are not keyCode dependent
 		if ((center.x < padding) || (center.x > 1024 - padding) 
-			|| (center.y < padding) || (center.y > 690 - padding)) {
+			|| (center.y < padding) || (center.y > 768 - padding)) {
 			// however, changes to values are
 			if (keyCode === 87) {
 				andyLocation.x += (step * Math.cos(andyLocation.angle * Math.PI / 180));
