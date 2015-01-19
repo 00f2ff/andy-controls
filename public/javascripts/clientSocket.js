@@ -166,7 +166,8 @@ function findAndyCenter() {
 // if the icon would start going over the edge, don't let it
 function permitMovement(keyCode) { // hard-coding in canvas sizing
 	var center = findAndyCenter();
-	var padding = andy.width * Math.sqrt(2) / 2;
+	// var padding = andy.width * Math.sqrt(2) / 2;
+	var padding = andy.width / 2;
 
 	if (andyLocation.angle === 0) {
 		if (keyCode === 87) {
