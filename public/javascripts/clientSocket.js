@@ -83,12 +83,12 @@ function addCircle(x, y) {
 	c.closePath();
 	c.fillStyle = 'rgba(255,0,0,0.4)'; // just a random opacity
 	c.fill();
+	c.lineWidth = 5;
 	if (atTarget(r)) { // light up edge of circle if andy is within it
-		c.lineWidth = 5;
 		c.strokeStyle = 'rgba(0,0,255,0.4)';
 	}
 	else {
-		c.lineWidth = 0;
+		c.strokeStyle = 'rgba(0,0,255,0)'; // clear
 	}
 	c.stroke();
 }
