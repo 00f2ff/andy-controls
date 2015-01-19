@@ -64,11 +64,11 @@ function drawAndy() {
 function atTarget(radius) {
 	var center = findAndyCenter();
 	var distance = Math.sqrt(Math.pow((center.x - circleLocation.x), 2) + Math.pow((center.y - circleLocation.y), 2));
-	console.log("Distance: ",distance,", proper: ",radius+andy.width/2-2);
+	// console.log("Distance: ",distance,", proper: ",radius+andy.width/2-2);
 	// just checking for andy.width / 2 + radius distance to simplify calculations
 	// more accurate calc is what distance could be on diagonal, but i'm not doing that
 	if (distance <= radius + andy.width / 2 - 2) { // small inset area
-		console.log("Distance: ",distance);
+		// console.log("Distance: ",distance);
 		return true;
 	}
 	return false;
