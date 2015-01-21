@@ -105,12 +105,12 @@ function addCircle(x, y) {
 	if (targetInfo[0]) {
 		f = 'rgba(255,255,0,0.4'; // yellow
 		s = 'rgba(0,0,255,0.4)'; // blue
-		writeDistance(targetInfo[1], 'blue');
+		writeDistance(targetInfo[1], 'white');
 	}
 	else {
 		f = 'rgba(255,0,0,0.4'; // red
 		s = 'rgba(0,0,255,0)'; // clear
-		writeDistance(targetInfo[1], 'red');
+		writeDistance(targetInfo[1], 'black');
 	}
 
 	c.fillStyle = f;
