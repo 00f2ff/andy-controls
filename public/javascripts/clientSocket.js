@@ -84,9 +84,9 @@ function writeDistance(distance, color) {
 
 	// now display distance to target
 	var dString = "Distance to target: " + distance + " meters"; // IMPORTANT: distance needs to be scaled
-	c.font = "bold 26px Arial";
+	c.font = "26px Arial";
 	c.fillStyle = color;
-	c.fillText(dString, 630, 30);
+	c.fillText(dString, 30, 30);
 }
 
 // add circle function
