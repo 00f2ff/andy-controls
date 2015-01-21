@@ -64,33 +64,70 @@ function drawAndy() {
 function atTarget(radius) {
 	var center = findAndyCenter();
 	var distance = Math.sqrt(Math.pow((center.x - circleLocation.x), 2) + Math.pow((center.y - circleLocation.y), 2));
+	var distanceToTarget = (distance - (radius + andy.width / 2 - 2)).toFixed(2); // rounded to 2 decimal points
 	// console.log("Distance: ",distance,", proper: ",radius+andy.width/2-2);
 	// just checking for andy.width / 2 + radius distance to simplify calculations
 	// more accurate calc is what distance could be on diagonal, but i'm not doing that
 	if (distance <= radius + andy.width / 2 - 2) { // small inset area
 		// console.log("Distance: ",distance);
-		return true;
+		return [true, distanceToTarget];
 	}
-	return false;
+	return [false, distanceToTarget];
+}
+
+function writeDistance(distance, color) {
+	var c = context;
+
+	// now display distance to target
+	var dString = distance + " meters";
+	c.font = "20px Arial";
+	c.fillStyle = color;
+	c.fillText(dString, 500, 50);
 }
 
 // add circle function
 function addCircle(x, y) { 
 	var c = context;
 	var r = 30;
+	var f;
+	var s;
+
 	c.beginPath();
 	c.arc(x, y, r, 0, 2 * Math.PI, true);
 	c.closePath();
-	c.fillStyle = 'rgba(255,0,0,0.4)'; // just a random opacity
-	c.fill();
-	c.lineWidth = 5;
-	if (atTarget(r)) { // light up edge of circle if andy is within it
-		c.strokeStyle = 'rgba(0,0,255,0.4)';
+
+	var targetInfo = atTarget(r);
+
+	if (targetInfo[0]) {
+		f = 'rgba(255,255,0,0.4'; // yellow
+		s = 'rgba(0,0,255,0.4)'; // blue
+		writeDistance(targetInfo[1], 'blue');
 	}
 	else {
-		c.strokeStyle = 'rgba(0,0,255,0)'; // clear
+		f = 'rgba(255,0,0,0.4'; // red
+		s = 'rgba(0,0,255,0)'; // clear
+		writeDistance(targetInfo[1], 'red');
 	}
+
+	c.fillStyle = f;
+	c.fill();
+	c.lineWidth = 5;
+	c.strokeStyle = s;
 	c.stroke();
+
+	
+
+
+	// c.fillStyle = 'rgba(255,0,0,0.4)'; // just a random opacity
+	// c.fill();
+	// c.lineWidth = 5;
+	// if (atTarget(r)) { // light up edge of circle if andy is within it
+	// 	c.strokeStyle = 'rgba(0,0,255,0.4)';
+	// }
+	// else {
+	// 	c.strokeStyle = 'rgba(0,0,255,0)'; // clear
+	// }
+	// c.stroke();
 }
 
 // start function
