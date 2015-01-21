@@ -64,7 +64,7 @@ function drawAndy() {
 function atTarget(radius) {
 	var center = findAndyCenter();
 	var distance = Math.sqrt(Math.pow((center.x - circleLocation.x), 2) + Math.pow((center.y - circleLocation.y), 2));
-	var distanceToTarget = (distance - (radius + andy.width / 2 - 2)).toFixed(2); // rounded to 2 decimal points
+	var distanceToTarget = (distance - (radius + andy.width / 2 - 2)).toFixed(2) / 20; // rounded to 2 decimal points
 	// in order for this to register the edge of the circle, things need to be subtracted from the distance. However, this creates a negative number, so account for that
 	if (distanceToTarget < 0) {
 		distanceToTarget = 0;
