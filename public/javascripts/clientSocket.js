@@ -65,6 +65,10 @@ function atTarget(radius) {
 	var center = findAndyCenter();
 	var distance = Math.sqrt(Math.pow((center.x - circleLocation.x), 2) + Math.pow((center.y - circleLocation.y), 2));
 	var distanceToTarget = (distance - (radius + andy.width / 2 - 2)).toFixed(2); // rounded to 2 decimal points
+	// in order for this to register the edge of the circle, things need to be subtracted from the distance. However, this creates a negative number, so account for that
+	if (distanceToTarget < 0) {
+		distanceToTarget = 0;
+	}
 	// console.log("Distance: ",distance,", proper: ",radius+andy.width/2-2);
 	// just checking for andy.width / 2 + radius distance to simplify calculations
 	// more accurate calc is what distance could be on diagonal, but i'm not doing that
@@ -79,10 +83,10 @@ function writeDistance(distance, color) {
 	var c = context;
 
 	// now display distance to target
-	var dString = distance + " meters";
-	c.font = "20px Arial";
+	var dString = "Distance to target: " + distance + " meters"; // IMPORTANT: distance needs to be scaled
+	c.font = "32px Arial";
 	c.fillStyle = color;
-	c.fillText(dString, 500, 50);
+	c.fillText(dString, 800, 30);
 }
 
 // add circle function
