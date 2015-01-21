@@ -79,13 +79,13 @@ function atTarget(radius) {
 	return [false, distanceToTarget];
 }
 
-function writeDistance(distance, color) {
+function writeDistance(distance) {
 	var c = context;
 
 	// now display distance to target
 	var dString = "Distance to target: " + distance + " meters"; // IMPORTANT: distance needs to be scaled
 	c.font = "26px Arial";
-	c.fillStyle = color;
+	c.fillStyle = 'white';
 	c.fillText(dString, 30, 30);
 }
 
@@ -105,12 +105,12 @@ function addCircle(x, y) {
 	if (targetInfo[0]) {
 		f = 'rgba(255,255,0,0.4'; // yellow
 		s = 'rgba(0,0,255,0.4)'; // blue
-		writeDistance(targetInfo[1], 'white');
+		writeDistance(targetInfo[1]);
 	}
 	else {
 		f = 'rgba(255,0,0,0.4'; // red
 		s = 'rgba(0,0,255,0)'; // clear
-		writeDistance(targetInfo[1], 'black');
+		writeDistance(targetInfo[1);
 	}
 
 	c.fillStyle = f;
