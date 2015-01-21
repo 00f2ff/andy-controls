@@ -45,7 +45,7 @@ var circleLocation = {x: -1, y: -1}
 
 // set rotational angle and movement step
 var turn = 0.5;
-var step = 0.25;
+var step = 0.25 / 3;
 
 
 // add andy to context
