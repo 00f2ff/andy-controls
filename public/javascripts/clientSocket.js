@@ -66,7 +66,7 @@ function atTarget(radius) {
 	var distance = Math.sqrt(Math.pow((center.x - circleLocation.x), 2) + Math.pow((center.y - circleLocation.y), 2));
 	var distanceToTarget = ((distance - (radius + andy.width / 2 - 2)) / 100).toFixed(2); // rounded to 2 decimal points
 	// in order for this to register the edge of the circle, things need to be subtracted from the distance. However, this creates a negative number, so account for that
-	if (distanceToTarget < 0) {
+	if (distanceToTarget < 0.01) { // avoid -0
 		distanceToTarget = 0;
 	}
 	// console.log("Distance: ",distance,", proper: ",radius+andy.width/2-2);
