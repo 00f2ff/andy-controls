@@ -47,6 +47,8 @@ var circleLocation = {x: -1, y: -1}
 var turn = 0.5;
 var step = 0.25 / 1.5;
 
+var stepIncrement = 0.25 / 3; // increment of step
+
 
 // add andy to context
 andy.onload = function() {
@@ -295,6 +297,14 @@ $(document).bind('keydown', function(e) { // *** i'm disallowing sideways motion
 			redrawCanvasWithRotation();
 			// send server updated andyLocation data
 			socket.emit('controllerMove', {x: andyLocation.x, y: andyLocation.y, angle: andyLocation.angle});
+			break;
+		case 38: // up arrow: speedup
+			step += stepIncrement;
+			break;
+		case 40: // down arrow: slow down
+			if (step > 0) {
+				step -= stepIncrement;
+			}
 			break;
 	}
 });
